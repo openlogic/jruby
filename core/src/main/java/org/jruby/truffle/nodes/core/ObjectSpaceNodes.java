@@ -15,7 +15,7 @@ import com.oracle.truffle.api.source.SourceSection;
 import org.jruby.truffle.runtime.ModuleOperations;
 import org.jruby.truffle.runtime.ObjectIDOperations;
 import org.jruby.truffle.runtime.RubyContext;
-import org.jruby.truffle.runtime.UndefinedPlaceholder;
+import org.jruby.truffle.runtime.U;
 import org.jruby.truffle.runtime.core.RubyBasicObject;
 import org.jruby.truffle.runtime.core.RubyBignum;
 import org.jruby.truffle.runtime.core.RubyClass;
@@ -97,7 +97,7 @@ public abstract class ObjectSpaceNodes {
         }
 
         @Specialization
-        public int eachObject(VirtualFrame frame, @SuppressWarnings("unused") UndefinedPlaceholder ofClass, RubyProc block) {
+        public int eachObject(VirtualFrame frame, @SuppressWarnings("unused") U ofClass, RubyProc block) {
             notDesignedForCompilation();
 
             final Collection<RubyBasicObject> liveObjects = getContext().getObjectSpaceManager().collectLiveObjects().values();

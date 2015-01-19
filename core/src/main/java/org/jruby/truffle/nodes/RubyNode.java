@@ -23,7 +23,7 @@ import org.jruby.truffle.nodes.instrument.RubyWrapperNode;
 import org.jruby.truffle.nodes.yield.YieldDispatchNode;
 import org.jruby.truffle.runtime.LexicalScope;
 import org.jruby.truffle.runtime.RubyContext;
-import org.jruby.truffle.runtime.UndefinedPlaceholder;
+import org.jruby.truffle.runtime.U;
 import org.jruby.truffle.runtime.core.*;
 
 import java.math.BigInteger;
@@ -174,8 +174,8 @@ public abstract class RubyNode extends Node implements ProbeNode.Instrumentable 
         return RubyTypesGen.RUBYTYPES.expectRubyEncoding(execute(frame));
     }
 
-    public UndefinedPlaceholder executeUndefinedPlaceholder(VirtualFrame frame) throws UnexpectedResultException {
-        return RubyTypesGen.RUBYTYPES.expectUndefinedPlaceholder(execute(frame));
+    public U executeUndefinedPlaceholder(VirtualFrame frame) throws UnexpectedResultException {
+        return RubyTypesGen.RUBYTYPES.expectU(execute(frame));
     }
 
     public RubyEncodingConverter executeRubyEncodingConverter(VirtualFrame frame) throws UnexpectedResultException {
@@ -285,7 +285,7 @@ public abstract class RubyNode extends Node implements ProbeNode.Instrumentable 
 
     @SuppressWarnings("static-method")
     public boolean isUndefinedPlaceholder(Object value) {
-        return value instanceof UndefinedPlaceholder;
+        return value instanceof U;
     }
 
     @SuppressWarnings("static-method")

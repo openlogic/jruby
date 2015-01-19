@@ -16,10 +16,9 @@ import com.oracle.truffle.api.source.SourceSection;
 import org.jruby.runtime.Visibility;
 import org.jruby.truffle.nodes.RubyNode;
 import org.jruby.truffle.nodes.dispatch.CallDispatchHeadNode;
-import org.jruby.truffle.nodes.dispatch.DispatchHeadNode;
 import org.jruby.truffle.nodes.dispatch.DispatchHeadNodeFactory;
 import org.jruby.truffle.runtime.RubyContext;
-import org.jruby.truffle.runtime.UndefinedPlaceholder;
+import org.jruby.truffle.runtime.U;
 import org.jruby.truffle.runtime.control.RaiseException;
 import org.jruby.truffle.runtime.core.RubyBasicObject;
 import org.jruby.truffle.runtime.core.RubyClass;
@@ -74,7 +73,7 @@ public abstract class ClassNodes {
         }
 
         @Specialization
-        public RubyBasicObject newInstance(VirtualFrame frame, RubyClass rubyClass, Object[] args, @SuppressWarnings("unused") UndefinedPlaceholder block) {
+        public RubyBasicObject newInstance(VirtualFrame frame, RubyClass rubyClass, Object[] args, @SuppressWarnings("unused") U block) {
             return doNewInstance(frame, rubyClass, args, null);
         }
 
@@ -112,18 +111,18 @@ public abstract class ClassNodes {
         }
 
         @Specialization
-        public RubyClass initialize(RubyClass rubyClass, UndefinedPlaceholder superclass, UndefinedPlaceholder block) {
+        public RubyClass initialize(RubyClass rubyClass, U superclass, U block) {
             return initialize(rubyClass, getContext().getCoreLibrary().getObjectClass(), block);
         }
 
         @Specialization
-        public RubyClass initialize(RubyClass rubyClass, RubyClass superclass, UndefinedPlaceholder block) {
+        public RubyClass initialize(RubyClass rubyClass, RubyClass superclass, U block) {
             rubyClass.initialize(superclass);
             return rubyClass;
         }
 
         @Specialization
-        public RubyClass initialize(VirtualFrame frame, RubyClass rubyClass, UndefinedPlaceholder superclass, RubyProc block) {
+        public RubyClass initialize(VirtualFrame frame, RubyClass rubyClass, U superclass, RubyProc block) {
             return initialize(frame, rubyClass, getContext().getCoreLibrary().getObjectClass(), block);
         }
 

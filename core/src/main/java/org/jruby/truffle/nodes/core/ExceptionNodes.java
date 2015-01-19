@@ -13,7 +13,7 @@ import com.oracle.truffle.api.dsl.Specialization;
 import com.oracle.truffle.api.source.SourceSection;
 import org.jruby.truffle.runtime.RubyCallStack;
 import org.jruby.truffle.runtime.RubyContext;
-import org.jruby.truffle.runtime.UndefinedPlaceholder;
+import org.jruby.truffle.runtime.U;
 import org.jruby.truffle.runtime.core.RubyArray;
 import org.jruby.truffle.runtime.core.RubyException;
 import org.jruby.truffle.runtime.core.RubyNilClass;
@@ -34,7 +34,7 @@ public abstract class ExceptionNodes {
         }
 
         @Specialization
-        public RubyNilClass initialize(RubyException exception, UndefinedPlaceholder message) {
+        public RubyNilClass initialize(RubyException exception, U message) {
             notDesignedForCompilation();
 
             exception.initialize(getContext().makeString(" "), RubyCallStack.getBacktrace(this));

@@ -18,7 +18,7 @@ import org.jruby.RubyMath;
 import org.jruby.truffle.nodes.RubyNode;
 import org.jruby.truffle.nodes.dispatch.*;
 import org.jruby.truffle.runtime.RubyContext;
-import org.jruby.truffle.runtime.UndefinedPlaceholder;
+import org.jruby.truffle.runtime.U;
 import org.jruby.truffle.runtime.control.RaiseException;
 import org.jruby.truffle.runtime.core.RubyArray;
 import org.jruby.truffle.runtime.core.RubyBignum;
@@ -710,27 +710,27 @@ public abstract class MathNodes {
         }
 
         @Specialization
-        public double function(int a, UndefinedPlaceholder b) {
+        public double function(int a, U b) {
             return doFunction(a);
         }
 
         @Specialization
-        public double function(long a, UndefinedPlaceholder b) {
+        public double function(long a, U b) {
             return doFunction(a);
         }
 
         @Specialization
-        public double function(RubyBignum a, UndefinedPlaceholder b) {
+        public double function(RubyBignum a, U b) {
             return doFunction(a.doubleValue());
         }
 
         @Specialization
-        public double function(double a, UndefinedPlaceholder b) {
+        public double function(double a, U b) {
             return doFunction(a);
         }
 
         @Specialization
-        public double function(VirtualFrame frame, Object a, UndefinedPlaceholder b) {
+        public double function(VirtualFrame frame, Object a, U b) {
             if (isANode.executeIsA(frame, a, getContext().getCoreLibrary().getNumericClass())) {
                 try {
                     return doFunction(

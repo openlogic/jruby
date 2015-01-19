@@ -18,7 +18,7 @@ import org.joni.Option;
 import org.jruby.runtime.Visibility;
 import org.jruby.truffle.nodes.RubyNode;
 import org.jruby.truffle.runtime.RubyContext;
-import org.jruby.truffle.runtime.UndefinedPlaceholder;
+import org.jruby.truffle.runtime.U;
 import org.jruby.truffle.runtime.control.RaiseException;
 import org.jruby.truffle.runtime.core.RubyBasicObject;
 import org.jruby.truffle.runtime.core.RubyEncoding;
@@ -197,7 +197,7 @@ public abstract class RegexpNodes {
         }
 
         @Specialization
-        public RubyRegexp initialize(RubyRegexp regexp, RubyString string, @SuppressWarnings("unused") UndefinedPlaceholder options) {
+        public RubyRegexp initialize(RubyRegexp regexp, RubyString string, @SuppressWarnings("unused") U options) {
             notDesignedForCompilation();
 
             regexp.initialize(this, string.getBytes());
@@ -208,7 +208,7 @@ public abstract class RegexpNodes {
         public RubyRegexp initialize(RubyRegexp regexp, RubyString string, @SuppressWarnings("unused") RubyNilClass options) {
             notDesignedForCompilation();
 
-            return initialize(regexp, string, UndefinedPlaceholder.INSTANCE);
+            return initialize(regexp, string, U.INSTANCE);
         }
 
         @Specialization
@@ -218,7 +218,7 @@ public abstract class RegexpNodes {
             if (booleanOptionsProfile.profile(options)) {
                 return initialize(regexp, string, Option.IGNORECASE);
             } else {
-                return initialize(regexp, string, UndefinedPlaceholder.INSTANCE);
+                return initialize(regexp, string, U.INSTANCE);
             }
         }
 
@@ -238,7 +238,7 @@ public abstract class RegexpNodes {
         }
 
         @Specialization
-        public RubyRegexp initialize(RubyRegexp regexp, RubyRegexp from, @SuppressWarnings("unused") UndefinedPlaceholder options) {
+        public RubyRegexp initialize(RubyRegexp regexp, RubyRegexp from, @SuppressWarnings("unused") U options) {
             notDesignedForCompilation();
 
             regexp.initialize(this, from.getSource(), from.getRegex().getOptions()); // TODO: is copying needed?
@@ -251,7 +251,7 @@ public abstract class RegexpNodes {
 
             getContext().getWarnings().warn("flags ignored");
 
-            return initialize(regexp, from, UndefinedPlaceholder.INSTANCE);
+            return initialize(regexp, from, U.INSTANCE);
         }
     }
 

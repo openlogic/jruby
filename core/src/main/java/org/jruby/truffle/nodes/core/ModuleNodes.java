@@ -396,7 +396,7 @@ public abstract class ModuleNodes {
         }
 
         @Specialization
-        public Object classEval(VirtualFrame frame, RubyModule module, RubyString code, @SuppressWarnings("unused") UndefinedPlaceholder file, @SuppressWarnings("unused") UndefinedPlaceholder line, @SuppressWarnings("unused") UndefinedPlaceholder block) {
+        public Object classEval(VirtualFrame frame, RubyModule module, RubyString code, @SuppressWarnings("unused") U file, @SuppressWarnings("unused") U line, @SuppressWarnings("unused") U block) {
             notDesignedForCompilation();
 
             final Source source = Source.fromText(code.getBytes(), "(eval)");
@@ -404,7 +404,7 @@ public abstract class ModuleNodes {
         }
 
         @Specialization
-        public Object classEval(VirtualFrame frame, RubyModule module, RubyString code, RubyString file, @SuppressWarnings("unused") UndefinedPlaceholder line, @SuppressWarnings("unused") UndefinedPlaceholder block) {
+        public Object classEval(VirtualFrame frame, RubyModule module, RubyString code, RubyString file, @SuppressWarnings("unused") U line, @SuppressWarnings("unused") U block) {
             notDesignedForCompilation();
 
             final Source source = Source.asPseudoFile(code.getBytes(), file.toString());
@@ -412,7 +412,7 @@ public abstract class ModuleNodes {
         }
 
         @Specialization
-        public Object classEval(VirtualFrame frame, RubyModule module, RubyString code, RubyString file, @SuppressWarnings("unused") int line, @SuppressWarnings("unused") UndefinedPlaceholder block) {
+        public Object classEval(VirtualFrame frame, RubyModule module, RubyString code, RubyString file, @SuppressWarnings("unused") int line, @SuppressWarnings("unused") U block) {
             notDesignedForCompilation();
 
             final Source source = Source.asPseudoFile(code.getBytes(), file.toString());
@@ -429,14 +429,14 @@ public abstract class ModuleNodes {
         }
 
         @Specialization
-        public Object classEval(VirtualFrame frame, RubyModule self, @SuppressWarnings("unused") UndefinedPlaceholder code, @SuppressWarnings("unused") UndefinedPlaceholder file, @SuppressWarnings("unused") UndefinedPlaceholder line, RubyProc block) {
+        public Object classEval(VirtualFrame frame, RubyModule self, @SuppressWarnings("unused") U code, @SuppressWarnings("unused") U file, @SuppressWarnings("unused") U line, RubyProc block) {
             notDesignedForCompilation();
 
             return yield.dispatchWithModifiedSelf(frame, block, self);
         }
 
         @Specialization
-        public Object classEval(RubyModule self, UndefinedPlaceholder code, UndefinedPlaceholder file, UndefinedPlaceholder line, UndefinedPlaceholder block) {
+        public Object classEval(RubyModule self, U code, U file, U line, U block) {
             notDesignedForCompilation();
 
             throw new RaiseException(getContext().getCoreLibrary().argumentError(0, 1, 2, this));
@@ -560,7 +560,7 @@ public abstract class ModuleNodes {
         }
 
         @Specialization
-        public RubyArray constants(RubyModule module, UndefinedPlaceholder unused) {
+        public RubyArray constants(RubyModule module, U unused) {
             return constants(module, true);
         }
 
@@ -591,7 +591,7 @@ public abstract class ModuleNodes {
         }
 
         @Specialization
-        public boolean isConstDefined(RubyModule module, RubyString name, @SuppressWarnings("unused") UndefinedPlaceholder inherit) {
+        public boolean isConstDefined(RubyModule module, RubyString name, @SuppressWarnings("unused") U inherit) {
             notDesignedForCompilation();
 
             return ModuleOperations.lookupConstant(getContext(), LexicalScope.NONE, module, name.toString()) != null;
@@ -609,7 +609,7 @@ public abstract class ModuleNodes {
         }
 
         @Specialization
-        public boolean isConstDefined(RubyModule module, RubySymbol name, @SuppressWarnings("unused") UndefinedPlaceholder inherit) {
+        public boolean isConstDefined(RubyModule module, RubySymbol name, @SuppressWarnings("unused") U inherit) {
             notDesignedForCompilation();
 
             return ModuleOperations.lookupConstant(getContext(), LexicalScope.NONE, module, name.toString()) != null;
@@ -730,14 +730,14 @@ public abstract class ModuleNodes {
         }
 
         @Specialization
-        public RubySymbol defineMethod(RubyModule module, RubyString name, @SuppressWarnings("unused") UndefinedPlaceholder proc, RubyProc block) {
+        public RubySymbol defineMethod(RubyModule module, RubyString name, @SuppressWarnings("unused") U proc, RubyProc block) {
             notDesignedForCompilation();
 
-            return defineMethod(module, name, block, UndefinedPlaceholder.INSTANCE);
+            return defineMethod(module, name, block, U.INSTANCE);
         }
 
         @Specialization
-        public RubySymbol defineMethod(RubyModule module, RubyString name, RubyProc proc, @SuppressWarnings("unused") UndefinedPlaceholder block) {
+        public RubySymbol defineMethod(RubyModule module, RubyString name, RubyProc proc, @SuppressWarnings("unused") U block) {
             notDesignedForCompilation();
 
             final RubySymbol symbol = getContext().getSymbolTable().getSymbol(name.getBytes());
@@ -746,14 +746,14 @@ public abstract class ModuleNodes {
         }
 
         @Specialization
-        public RubySymbol defineMethod(RubyModule module, RubySymbol name, @SuppressWarnings("unused") UndefinedPlaceholder proc, RubyProc block) {
+        public RubySymbol defineMethod(RubyModule module, RubySymbol name, @SuppressWarnings("unused") U proc, RubyProc block) {
             notDesignedForCompilation();
 
-            return defineMethod(module, name, block, UndefinedPlaceholder.INSTANCE);
+            return defineMethod(module, name, block, U.INSTANCE);
         }
 
         @Specialization
-        public RubySymbol defineMethod(RubyModule module, RubySymbol name, RubyProc proc, @SuppressWarnings("unused") UndefinedPlaceholder block) {
+        public RubySymbol defineMethod(RubyModule module, RubySymbol name, RubyProc proc, @SuppressWarnings("unused") U block) {
             notDesignedForCompilation();
 
             defineMethod(module, name, proc);
@@ -761,7 +761,7 @@ public abstract class ModuleNodes {
         }
 
         @Specialization
-        public RubySymbol defineMethod(RubyModule module, RubySymbol name, RubyMethod method, UndefinedPlaceholder block) {
+        public RubySymbol defineMethod(RubyModule module, RubySymbol name, RubyMethod method, U block) {
             notDesignedForCompilation();
 
             module.addMethod(this, method.getMethod().withNewName(name.toString()));
@@ -803,7 +803,7 @@ public abstract class ModuleNodes {
         }
 
         @Specialization
-        public RubyModule initialize(RubyModule module, UndefinedPlaceholder block) {
+        public RubyModule initialize(RubyModule module, U block) {
             return module;
         }
 
@@ -916,7 +916,7 @@ public abstract class ModuleNodes {
         }
 
         @Specialization
-        public boolean isMethodDefined(RubyModule module, RubyString name, @SuppressWarnings("unused") UndefinedPlaceholder inherit) {
+        public boolean isMethodDefined(RubyModule module, RubyString name, @SuppressWarnings("unused") U inherit) {
             notDesignedForCompilation();
 
             return ModuleOperations.lookupMethod(module, name.toString()) != null;
@@ -934,7 +934,7 @@ public abstract class ModuleNodes {
         }
 
         @Specialization
-        public boolean isMethodDefined(RubyModule module, RubySymbol name, @SuppressWarnings("unused") UndefinedPlaceholder inherit) {
+        public boolean isMethodDefined(RubyModule module, RubySymbol name, @SuppressWarnings("unused") U inherit) {
             notDesignedForCompilation();
 
             return ModuleOperations.lookupMethod(module, name.toString()) != null;
@@ -1163,7 +1163,7 @@ public abstract class ModuleNodes {
         }
 
         @Specialization
-        public RubyArray privateInstanceMethods(RubyModule module, UndefinedPlaceholder argument) {
+        public RubyArray privateInstanceMethods(RubyModule module, U argument) {
             return privateInstanceMethods(module, false);
         }
 
@@ -1201,7 +1201,7 @@ public abstract class ModuleNodes {
         }
 
         @Specialization
-        public RubyArray publicInstanceMethods(RubyModule module, UndefinedPlaceholder argument) {
+        public RubyArray publicInstanceMethods(RubyModule module, U argument) {
             return publicInstanceMethods(module, false);
         }
 
@@ -1238,7 +1238,7 @@ public abstract class ModuleNodes {
         }
 
         @Specialization
-        public RubyArray instanceMethods(RubyModule module, UndefinedPlaceholder argument) {
+        public RubyArray instanceMethods(RubyModule module, U argument) {
             notDesignedForCompilation();
 
             return instanceMethods(module, true);

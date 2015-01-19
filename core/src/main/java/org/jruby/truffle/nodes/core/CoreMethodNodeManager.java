@@ -168,7 +168,7 @@ public abstract class CoreMethodNodeManager {
         }
 
         if (methodDetails.getMethodAnnotation().needsBlock()) {
-            argumentsNodes.add(new ReadBlockNode(context, sourceSection, UndefinedPlaceholder.INSTANCE));
+            argumentsNodes.add(new ReadBlockNode(context, sourceSection, U.INSTANCE));
         }
 
         RubyNode methodNode = null;

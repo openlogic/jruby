@@ -19,7 +19,7 @@ import org.jruby.runtime.Helpers;
 import org.jruby.truffle.nodes.yield.YieldDispatchHeadNode;
 import org.jruby.truffle.runtime.RubyArguments;
 import org.jruby.truffle.runtime.RubyContext;
-import org.jruby.truffle.runtime.UndefinedPlaceholder;
+import org.jruby.truffle.runtime.U;
 import org.jruby.truffle.runtime.core.RubyArray;
 import org.jruby.truffle.runtime.core.RubyBinding;
 import org.jruby.truffle.runtime.core.RubyNilClass;
@@ -89,7 +89,7 @@ public abstract class ProcNodes {
         }
 
         @Specialization
-        public Object call(VirtualFrame frame, RubyProc proc, Object[] args, UndefinedPlaceholder block) {
+        public Object call(VirtualFrame frame, RubyProc proc, Object[] args, U block) {
             return yieldNode.dispatch(frame, proc, args);
         }
 

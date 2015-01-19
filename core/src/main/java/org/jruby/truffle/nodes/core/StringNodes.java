@@ -24,13 +24,11 @@ import org.joni.Region;
 import org.jruby.runtime.Visibility;
 import org.jruby.truffle.nodes.RubyNode;
 import org.jruby.truffle.nodes.dispatch.CallDispatchHeadNode;
-import org.jruby.truffle.nodes.dispatch.DispatchHeadNode;
 import org.jruby.truffle.nodes.dispatch.DispatchHeadNodeFactory;
 import org.jruby.truffle.runtime.RubyContext;
-import org.jruby.truffle.runtime.UndefinedPlaceholder;
+import org.jruby.truffle.runtime.U;
 import org.jruby.truffle.runtime.control.RaiseException;
 import org.jruby.truffle.runtime.core.*;
-import org.jruby.truffle.runtime.util.ArrayUtils;
 import org.jruby.util.ByteList;
 import org.jruby.util.Pack;
 import org.jruby.util.StringSupport;
@@ -200,7 +198,7 @@ public abstract class StringNodes {
         }
 
         @Specialization(rewriteOn = UnexpectedResultException.class)
-        public RubyString getIndexInBounds(RubyString string, int index, UndefinedPlaceholder undefined) throws UnexpectedResultException {
+        public RubyString getIndexInBounds(RubyString string, int index, U undefined) throws UnexpectedResultException {
             final int normalisedIndex = string.normaliseIndex(index);
             final ByteList bytes = string.getBytes();
 
@@ -212,7 +210,7 @@ public abstract class StringNodes {
         }
 
         @Specialization(contains = "getIndexInBounds")
-        public Object getIndex(RubyString string, int index, UndefinedPlaceholder undefined) {
+        public Object getIndex(RubyString string, int index, U undefined) {
             int normalisedIndex = string.normaliseIndex(index);
             final ByteList bytes = string.getBytes();
 
@@ -225,7 +223,7 @@ public abstract class StringNodes {
         }
 
         @Specialization
-        public Object slice(RubyString string, RubyRange.IntegerFixnumRange range, UndefinedPlaceholder undefined) {
+        public Object slice(RubyString string, RubyRange.IntegerFixnumRange range, U undefined) {
             notDesignedForCompilation();
 
             final String javaString = string.toString();
@@ -431,7 +429,7 @@ public abstract class StringNodes {
         }
 
         @Specialization
-        public RubyString chomp(RubyString string, UndefinedPlaceholder undefined) {
+        public RubyString chomp(RubyString string, U undefined) {
             notDesignedForCompilation();
             return string.getContext().makeString(StringNodesHelper.chomp(string));
         }
@@ -744,7 +742,7 @@ public abstract class StringNodes {
         }
 
         @Specialization
-        public RubyString gsub(VirtualFrame frame, RubyString string, RubyString regexpString, RubyString replacement, UndefinedPlaceholder block) {
+        public RubyString gsub(VirtualFrame frame, RubyString string, RubyString regexpString, RubyString replacement, U block) {
             notDesignedForCompilation();
 
             final RubyRegexp regexp = new RubyRegexp(this, getContext().getCoreLibrary().getRegexpClass(), escape(frame, regexpString).getBytes(), Option.DEFAULT);
@@ -752,7 +750,7 @@ public abstract class StringNodes {
         }
 
         @Specialization
-        public RubyString gsub(RubyString string, RubyRegexp regexp, RubyString replacement, @SuppressWarnings("unused") UndefinedPlaceholder block) {
+        public RubyString gsub(RubyString string, RubyRegexp regexp, RubyString replacement, @SuppressWarnings("unused") U block) {
             notDesignedForCompilation();
 
             return regexp.gsub(string, replacement.toString());
@@ -774,7 +772,7 @@ public abstract class StringNodes {
         }
 
         @Specialization
-        public RubyString gsub(VirtualFrame frame, RubyString string, RubyString regexpString, @SuppressWarnings("unused") UndefinedPlaceholder replacement, RubyProc block) {
+        public RubyString gsub(VirtualFrame frame, RubyString string, RubyString regexpString, @SuppressWarnings("unused") U replacement, RubyProc block) {
             notDesignedForCompilation();
 
             final RubyRegexp regexp = new RubyRegexp(this, getContext().getCoreLibrary().getRegexpClass(), escape(frame, regexpString).getBytes(), Option.DEFAULT);
@@ -782,7 +780,7 @@ public abstract class StringNodes {
         }
 
         @Specialization
-        public RubyString gsub(VirtualFrame frame, RubyString string, RubyRegexp regexp, @SuppressWarnings("unused") UndefinedPlaceholder replacement, RubyProc block) {
+        public RubyString gsub(VirtualFrame frame, RubyString string, RubyRegexp regexp, @SuppressWarnings("unused") U replacement, RubyProc block) {
             notDesignedForCompilation();
 
             final RubyContext context = getContext();
@@ -881,7 +879,7 @@ public abstract class StringNodes {
         }
 
         @Specialization
-        public RubyString initialize(RubyString self, UndefinedPlaceholder from) {
+        public RubyString initialize(RubyString self, U from) {
             return self;
         }
 
@@ -996,7 +994,7 @@ public abstract class StringNodes {
         }
 
         @Specialization
-        public RubyString ljust(RubyString string, int length, @SuppressWarnings("unused") UndefinedPlaceholder padding) {
+        public RubyString ljust(RubyString string, int length, @SuppressWarnings("unused") U padding) {
             notDesignedForCompilation();
 
             return getContext().makeString(RubyString.ljust(string.toString(), length, " "));
@@ -1066,7 +1064,7 @@ public abstract class StringNodes {
         }
 
         @Specialization
-        public Object rindex(RubyString string, RubyString subString, @SuppressWarnings("unused") UndefinedPlaceholder endPosition) {
+        public Object rindex(RubyString string, RubyString subString, @SuppressWarnings("unused") U endPosition) {
             notDesignedForCompilation();
 
             return rindex(string, subString, string.length());
@@ -1112,7 +1110,7 @@ public abstract class StringNodes {
         }
 
         @Specialization
-        public RubyString rjust(RubyString string, int length, @SuppressWarnings("unused") UndefinedPlaceholder padding) {
+        public RubyString rjust(RubyString string, int length, @SuppressWarnings("unused") U padding) {
             notDesignedForCompilation();
 
             return getContext().makeString(RubyString.rjust(string.toString(), length, " "));
@@ -1185,7 +1183,7 @@ public abstract class StringNodes {
         }
 
         @Specialization
-        public RubyArray scan(RubyString string, RubyString regexpString, UndefinedPlaceholder block) {
+        public RubyArray scan(RubyString string, RubyString regexpString, U block) {
             notDesignedForCompilation();
 
             final RubyRegexp regexp = new RubyRegexp(this, getContext().getCoreLibrary().getRegexpClass(), regexpString.getBytes(), Option.DEFAULT);
@@ -1201,7 +1199,7 @@ public abstract class StringNodes {
         }
 
         @Specialization
-        public RubyArray scan(RubyString string, RubyRegexp regexp, UndefinedPlaceholder block) {
+        public RubyArray scan(RubyString string, RubyRegexp regexp, U block) {
             notDesignedForCompilation();
 
             return RubyArray.fromObjects(getContext().getCoreLibrary().getArrayClass(), (Object[]) regexp.scan(string));
@@ -1329,7 +1327,7 @@ public abstract class StringNodes {
         }
 
         @Specialization
-        public RubyArray split(RubyString string, UndefinedPlaceholder sep) {
+        public RubyArray split(RubyString string, U sep) {
             notDesignedForCompilation();
 
             return splitHelper(string, " ");

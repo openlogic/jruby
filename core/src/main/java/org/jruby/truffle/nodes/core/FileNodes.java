@@ -15,7 +15,7 @@ import com.oracle.truffle.api.frame.VirtualFrame;
 import com.oracle.truffle.api.source.SourceSection;
 import jnr.posix.FileStat;
 import org.jruby.truffle.runtime.RubyContext;
-import org.jruby.truffle.runtime.UndefinedPlaceholder;
+import org.jruby.truffle.runtime.U;
 import org.jruby.truffle.runtime.core.*;
 import org.jruby.util.ByteList;
 
@@ -232,7 +232,7 @@ public abstract class FileNodes {
         }
 
         @Specialization
-        public RubyString expandPath(RubyString path, @SuppressWarnings("unused") UndefinedPlaceholder dir) {
+        public RubyString expandPath(RubyString path, @SuppressWarnings("unused") U dir) {
             return getContext().makeString(RubyFile.expandPath(path.toString()));
         }
 

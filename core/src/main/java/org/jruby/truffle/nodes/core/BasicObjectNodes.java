@@ -24,7 +24,7 @@ import org.jruby.truffle.nodes.dispatch.*;
 import org.jruby.truffle.nodes.yield.YieldDispatchHeadNode;
 import org.jruby.truffle.runtime.ObjectIDOperations;
 import org.jruby.truffle.runtime.RubyContext;
-import org.jruby.truffle.runtime.UndefinedPlaceholder;
+import org.jruby.truffle.runtime.U;
 import org.jruby.truffle.runtime.control.RaiseException;
 import org.jruby.truffle.runtime.core.*;
 import org.jruby.truffle.runtime.util.ArrayUtils;
@@ -232,14 +232,14 @@ public abstract class BasicObjectNodes {
         }
 
         @Specialization
-        public Object instanceEval(VirtualFrame frame, Object receiver, RubyString string, UndefinedPlaceholder block) {
+        public Object instanceEval(VirtualFrame frame, Object receiver, RubyString string, U block) {
             notDesignedForCompilation();
 
             return getContext().eval(string.getBytes(), receiver, this);
         }
 
         @Specialization
-        public Object instanceEval(VirtualFrame frame, Object receiver, UndefinedPlaceholder string, RubyProc block) {
+        public Object instanceEval(VirtualFrame frame, Object receiver, U string, RubyProc block) {
             notDesignedForCompilation();
 
             return yield.dispatchWithModifiedSelf(frame, block, receiver);
@@ -259,7 +259,7 @@ public abstract class BasicObjectNodes {
         }
 
         @Specialization
-        public Object methodMissing(Object self, Object[] args, @SuppressWarnings("unused") UndefinedPlaceholder block) {
+        public Object methodMissing(Object self, Object[] args, @SuppressWarnings("unused") U block) {
             notDesignedForCompilation();
 
             return methodMissing(self, args, (RubyProc) null);
@@ -325,7 +325,7 @@ public abstract class BasicObjectNodes {
         }
 
         @Specialization
-        public Object send(VirtualFrame frame, Object self, Object[] args, UndefinedPlaceholder block) {
+        public Object send(VirtualFrame frame, Object self, Object[] args, U block) {
             return send(frame, self, args, (RubyProc) null);
         }
 

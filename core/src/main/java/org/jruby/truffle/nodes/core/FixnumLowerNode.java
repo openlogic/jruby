@@ -13,7 +13,7 @@ import com.oracle.truffle.api.CompilerDirectives;
 import com.oracle.truffle.api.frame.VirtualFrame;
 import com.oracle.truffle.api.nodes.UnexpectedResultException;
 import org.jruby.truffle.nodes.RubyNode;
-import org.jruby.truffle.runtime.UndefinedPlaceholder;
+import org.jruby.truffle.runtime.U;
 import org.jruby.truffle.runtime.control.RaiseException;
 import org.jruby.truffle.runtime.core.CoreLibrary;
 import org.jruby.truffle.runtime.core.RubyBasicObject;
@@ -70,7 +70,7 @@ public class FixnumLowerNode extends RubyNode {
             }
         }
 
-        if (hasSeenUndefined && value instanceof UndefinedPlaceholder) {
+        if (hasSeenUndefined && value instanceof U) {
             return value;
         }
 
@@ -104,7 +104,7 @@ public class FixnumLowerNode extends RubyNode {
             }
         }
 
-        if (value instanceof UndefinedPlaceholder) {
+        if (value instanceof U) {
             hasSeenUndefined = true;
             return value;
         }
@@ -179,7 +179,7 @@ public class FixnumLowerNode extends RubyNode {
     }
 
     @Override
-    public UndefinedPlaceholder executeUndefinedPlaceholder(VirtualFrame frame) throws UnexpectedResultException {
+    public U executeUndefinedPlaceholder(VirtualFrame frame) throws UnexpectedResultException {
         try {
             return super.executeUndefinedPlaceholder(frame);
         } catch (UnexpectedResultException e) {

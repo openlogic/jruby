@@ -19,11 +19,10 @@ import com.oracle.truffle.api.utilities.BranchProfile;
 import com.oracle.truffle.api.utilities.ConditionProfile;
 import org.jruby.truffle.nodes.RubyNode;
 import org.jruby.truffle.nodes.dispatch.CallDispatchHeadNode;
-import org.jruby.truffle.nodes.dispatch.DispatchHeadNode;
 import org.jruby.truffle.nodes.dispatch.DispatchHeadNodeFactory;
 import org.jruby.truffle.nodes.methods.UnsupportedOperationBehavior;
 import org.jruby.truffle.runtime.RubyContext;
-import org.jruby.truffle.runtime.UndefinedPlaceholder;
+import org.jruby.truffle.runtime.U;
 import org.jruby.truffle.runtime.control.RaiseException;
 import org.jruby.truffle.runtime.core.RubyArray;
 import org.jruby.truffle.runtime.core.RubyBasicObject;
@@ -1621,13 +1620,13 @@ public abstract class FixnumNodes {
 
         @CompilerDirectives.TruffleBoundary
         @Specialization
-        public RubyString toS(int n, UndefinedPlaceholder undefined) {
+        public RubyString toS(int n, U undefined) {
             return getContext().makeString(Integer.toString(n));
         }
 
         @CompilerDirectives.TruffleBoundary
         @Specialization
-        public RubyString toS(long n, UndefinedPlaceholder undefined) {
+        public RubyString toS(long n, U undefined) {
             return getContext().makeString(Long.toString(n));
         }
 

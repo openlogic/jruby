@@ -23,7 +23,7 @@ import org.jruby.truffle.nodes.hash.FindEntryNode;
 import org.jruby.truffle.nodes.yield.YieldDispatchHeadNode;
 import org.jruby.truffle.runtime.DebugOperations;
 import org.jruby.truffle.runtime.RubyContext;
-import org.jruby.truffle.runtime.UndefinedPlaceholder;
+import org.jruby.truffle.runtime.U;
 import org.jruby.truffle.runtime.core.*;
 import org.jruby.truffle.runtime.hash.Entry;
 import org.jruby.truffle.runtime.hash.HashOperations;
@@ -606,7 +606,7 @@ public abstract class HashNodes {
         }
 
         @Specialization
-        public RubyNilClass initialize(RubyHash hash, UndefinedPlaceholder defaultValue, UndefinedPlaceholder block) {
+        public RubyNilClass initialize(RubyHash hash, U defaultValue, U block) {
             notDesignedForCompilation();
             hash.setStore(null, 0, null, null);
             hash.setDefaultBlock(null);
@@ -614,7 +614,7 @@ public abstract class HashNodes {
         }
 
         @Specialization
-        public RubyNilClass initialize(RubyHash hash, UndefinedPlaceholder defaultValue, RubyProc block) {
+        public RubyNilClass initialize(RubyHash hash, U defaultValue, RubyProc block) {
             notDesignedForCompilation();
             hash.setStore(null, 0, null, null);
             hash.setDefaultBlock(block);
@@ -622,7 +622,7 @@ public abstract class HashNodes {
         }
 
         @Specialization
-        public RubyNilClass initialize(RubyHash hash, Object defaultValue, UndefinedPlaceholder block) {
+        public RubyNilClass initialize(RubyHash hash, Object defaultValue, U block) {
             notDesignedForCompilation();
             hash.setDefaultValue(defaultValue);
             return getContext().getCoreLibrary().getNilObject();
@@ -1044,7 +1044,7 @@ public abstract class HashNodes {
         }
 
         @Specialization
-        public Object defaultElement(VirtualFrame frame, RubyHash hash, UndefinedPlaceholder undefined) {
+        public Object defaultElement(VirtualFrame frame, RubyHash hash, U undefined) {
             Object ret = hash.getDefaultValue();
 
             // TODO (nirvdrum Dec. 1, 2014): This needs to evaluate the defaultProc if it exists before it tries defaultValue.

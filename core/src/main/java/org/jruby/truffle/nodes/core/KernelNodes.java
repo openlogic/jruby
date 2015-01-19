@@ -355,7 +355,7 @@ public abstract class KernelNodes {
         }
 
         @Specialization
-        public Object caller(UndefinedPlaceholder omit) {
+        public Object caller(U omit) {
             return caller(1);
         }
 
@@ -561,21 +561,21 @@ public abstract class KernelNodes {
         }
 
         @Specialization
-        public Object eval(VirtualFrame frame, RubyString source, UndefinedPlaceholder binding, UndefinedPlaceholder filename, UndefinedPlaceholder lineNumber) {
+        public Object eval(VirtualFrame frame, RubyString source, U binding, U filename, U lineNumber) {
             notDesignedForCompilation();
 
             return eval(source, getCallerBinding(frame), filename, lineNumber);
         }
 
         @Specialization
-        public Object eval(RubyString source, RubyBinding binding, UndefinedPlaceholder filename, UndefinedPlaceholder lineNumber) {
+        public Object eval(RubyString source, RubyBinding binding, U filename, U lineNumber) {
             notDesignedForCompilation();
 
             return getContext().eval(source.getBytes(), binding, this);
         }
 
         @Specialization
-        public Object eval(RubyString source, RubyBinding binding, RubyString filename, UndefinedPlaceholder lineNumber) {
+        public Object eval(RubyString source, RubyBinding binding, RubyString filename, U lineNumber) {
             notDesignedForCompilation();
 
             // TODO (nirvdrum Dec. 29, 2014) Do something with the supplied filename.
@@ -591,14 +591,14 @@ public abstract class KernelNodes {
         }
 
         @Specialization(guards = "!isRubyString(arguments[0])")
-        public Object eval(VirtualFrame frame, RubyBasicObject object, UndefinedPlaceholder binding, UndefinedPlaceholder filename, UndefinedPlaceholder lineNumber) {
+        public Object eval(VirtualFrame frame, RubyBasicObject object, U binding, U filename, U lineNumber) {
             notDesignedForCompilation();
 
             return eval(frame, object, getCallerBinding(frame), filename, lineNumber);
         }
 
         @Specialization(guards = "!isRubyString(arguments[0])")
-        public Object eval(VirtualFrame frame, RubyBasicObject object, RubyBinding binding, UndefinedPlaceholder filename, UndefinedPlaceholder lineNumber) {
+        public Object eval(VirtualFrame frame, RubyBasicObject object, RubyBinding binding, U filename, U lineNumber) {
             notDesignedForCompilation();
 
             Object coerced;
@@ -630,7 +630,7 @@ public abstract class KernelNodes {
         }
 
         @Specialization(guards = "!isRubyBinding(arguments[1])")
-        public Object eval(RubyBasicObject source, RubyBasicObject badBinding, UndefinedPlaceholder filename, UndefinedPlaceholder lineNumber) {
+        public Object eval(RubyBasicObject source, RubyBasicObject badBinding, U filename, U lineNumber) {
             throw new RaiseException(
                     getContext().getCoreLibrary().typeError(
                             String.format("wrong argument type %s (expected binding)",
@@ -713,7 +713,7 @@ public abstract class KernelNodes {
         }
 
         @Specialization
-        public Object exit(UndefinedPlaceholder exitCode) {
+        public Object exit(U exitCode) {
             notDesignedForCompilation();
 
             getContext().shutdown();
@@ -744,7 +744,7 @@ public abstract class KernelNodes {
         }
 
         @Specialization
-        public RubyNilClass exit(UndefinedPlaceholder exitCode) {
+        public RubyNilClass exit(U exitCode) {
             return exit(1);
         }
 
@@ -1361,7 +1361,7 @@ public abstract class KernelNodes {
         }
 
         @Specialization
-        public RubyArray methods(RubyBasicObject self, UndefinedPlaceholder unused) {
+        public RubyArray methods(RubyBasicObject self, U unused) {
             return methods(self, true);
         }
 
@@ -1479,7 +1479,7 @@ public abstract class KernelNodes {
         }
 
         @Specialization
-        public RubyArray private_methods(RubyBasicObject self, UndefinedPlaceholder unused) {
+        public RubyArray private_methods(RubyBasicObject self, U unused) {
             return private_methods(self, true);
         }
 
@@ -1549,11 +1549,11 @@ public abstract class KernelNodes {
                 getContext().getRuntime().getWarnings().warn(IRubyWarnings.ID.TRUFFLE, Truffle.getRuntime().getCallerFrame().getCallNode().getEncapsulatingSourceSection().getSource().getName(), Truffle.getRuntime().getCallerFrame().getCallNode().getEncapsulatingSourceSection().getStartLine(), "Object#methods always returns inherited methods at the moment");
             }
 
-            return methods(self, UndefinedPlaceholder.INSTANCE);
+            return methods(self, U.INSTANCE);
         }
 
         @Specialization
-        public RubyArray methods(RubyBasicObject self, UndefinedPlaceholder includeInherited) {
+        public RubyArray methods(RubyBasicObject self, U includeInherited) {
             notDesignedForCompilation();
 
             final RubyArray array = new RubyArray(self.getContext().getCoreLibrary().getArrayClass());
@@ -1587,21 +1587,21 @@ public abstract class KernelNodes {
         }
 
         @Specialization
-        public Object raise(VirtualFrame frame, UndefinedPlaceholder undefined1, UndefinedPlaceholder undefined2, Object undefined3) {
+        public Object raise(VirtualFrame frame, U undefined1, U undefined2, Object undefined3) {
             notDesignedForCompilation();
 
             return raise(frame, getContext().getCoreLibrary().getRuntimeErrorClass(), getContext().makeString("re-raised - don't have the current exception yet!"), undefined1);
         }
 
         @Specialization
-        public Object raise(VirtualFrame frame, RubyString message, UndefinedPlaceholder undefined1, Object undefined2) {
+        public Object raise(VirtualFrame frame, RubyString message, U undefined1, Object undefined2) {
             notDesignedForCompilation();
 
             return raise(frame, getContext().getCoreLibrary().getRuntimeErrorClass(), message, undefined1);
         }
 
         @Specialization
-        public Object raise(VirtualFrame frame, RubyClass exceptionClass, UndefinedPlaceholder undefined1, Object undefined2) {
+        public Object raise(VirtualFrame frame, RubyClass exceptionClass, U undefined1, Object undefined2) {
             notDesignedForCompilation();
 
             return raise(frame, exceptionClass, getContext().makeString(""), undefined1);
@@ -1623,7 +1623,7 @@ public abstract class KernelNodes {
         }
 
         @Specialization
-        public Object raise(RubyException exception, UndefinedPlaceholder undefined1, Object undefined2) {
+        public Object raise(RubyException exception, U undefined1, Object undefined2) {
             throw new RaiseException(exception);
         }
 
@@ -1641,7 +1641,7 @@ public abstract class KernelNodes {
         }
 
         @Specialization
-        public double rand(UndefinedPlaceholder undefined) {
+        public double rand(U undefined) {
             return getContext().getRandom().nextDouble();
         }
 
@@ -1745,7 +1745,7 @@ public abstract class KernelNodes {
         public abstract boolean executeDoesRespondTo(VirtualFrame frame, Object object, Object name, boolean includePrivate);
 
         @Specialization
-        public boolean doesRespondTo(VirtualFrame frame, Object object, RubyString name, UndefinedPlaceholder checkVisibility) {
+        public boolean doesRespondTo(VirtualFrame frame, Object object, RubyString name, U checkVisibility) {
             return dispatch.doesRespondTo(frame, name, object);
         }
 
@@ -1759,7 +1759,7 @@ public abstract class KernelNodes {
         }
 
         @Specialization
-        public boolean doesRespondTo(VirtualFrame frame, Object object, RubySymbol name, UndefinedPlaceholder checkVisibility) {
+        public boolean doesRespondTo(VirtualFrame frame, Object object, RubySymbol name, U checkVisibility) {
             return dispatch.doesRespondTo(frame, name, object);
         }
 
@@ -1785,12 +1785,12 @@ public abstract class KernelNodes {
         }
 
         @Specialization
-        public boolean doesRespondToMissing(Object object, RubyString name, UndefinedPlaceholder includeAll) {
+        public boolean doesRespondToMissing(Object object, RubyString name, U includeAll) {
             return false;
         }
 
         @Specialization
-        public boolean doesRespondToMissing(Object object, RubySymbol name, UndefinedPlaceholder includeAll) {
+        public boolean doesRespondToMissing(Object object, RubySymbol name, U includeAll) {
             return false;
         }
 
@@ -1902,7 +1902,7 @@ public abstract class KernelNodes {
         }
 
         @Specialization
-        public RubyArray singletonMethods(RubyBasicObject self, UndefinedPlaceholder includeInherited) {
+        public RubyArray singletonMethods(RubyBasicObject self, U includeInherited) {
             return singletonMethods(self, false);
         }
 
@@ -1947,7 +1947,7 @@ public abstract class KernelNodes {
         }
 
         @Specialization
-        public double sleep(UndefinedPlaceholder duration) {
+        public double sleep(U duration) {
             return doSleep(0);
         }
 
@@ -2177,7 +2177,7 @@ public abstract class KernelNodes {
         }
 
         @Specialization
-        public Object doThrow(Object tag, UndefinedPlaceholder value) {
+        public Object doThrow(Object tag, U value) {
             return doThrow(tag, (Object) value);
         }
 
@@ -2192,7 +2192,7 @@ public abstract class KernelNodes {
                         RubyCallStack.getBacktrace(this)));
             }
 
-            if (value instanceof UndefinedPlaceholder) {
+            if (value instanceof U) {
                 throw new ThrowException(tag, getContext().getCoreLibrary().getNilObject());
             } else {
                 throw new ThrowException(tag, value);

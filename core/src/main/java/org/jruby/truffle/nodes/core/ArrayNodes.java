@@ -35,7 +35,7 @@ import org.jruby.truffle.runtime.*;
 import org.jruby.truffle.nodes.core.ArrayNodesFactory.AtNodeFactory;
 import org.jruby.truffle.runtime.RubyArguments;
 import org.jruby.truffle.runtime.RubyContext;
-import org.jruby.truffle.runtime.UndefinedPlaceholder;
+import org.jruby.truffle.runtime.U;
 import org.jruby.truffle.runtime.control.BreakException;
 import org.jruby.truffle.runtime.control.NextException;
 import org.jruby.truffle.runtime.control.RaiseException;
@@ -654,7 +654,7 @@ public abstract class ArrayNodes {
         }
 
         @Specialization
-        public Object index(RubyArray array, int index, UndefinedPlaceholder undefined) {
+        public Object index(RubyArray array, int index, U undefined) {
             return atNode.executeAt(array, index);
         }
 
@@ -715,7 +715,7 @@ public abstract class ArrayNodes {
         }
 
         @Specialization(guards = "isObject")
-        public Object sliceObject(RubyArray array, RubyRange.IntegerFixnumRange range, UndefinedPlaceholder undefined) {
+        public Object sliceObject(RubyArray array, RubyRange.IntegerFixnumRange range, U undefined) {
             notDesignedForCompilation();
 
             final int normalisedIndex = array.normaliseIndex(range.getBegin());
@@ -750,7 +750,7 @@ public abstract class ArrayNodes {
         }
 
         @Specialization(guards = "isNull")
-        public Object setNullIntegerFixnum(RubyArray array, int index, int value, UndefinedPlaceholder unused) {
+        public Object setNullIntegerFixnum(RubyArray array, int index, int value, U unused) {
             if (index == 0) {
                 array.setStore(new int[]{value}, 1);
             } else {
@@ -762,7 +762,7 @@ public abstract class ArrayNodes {
         }
 
         @Specialization(guards = "isNull")
-        public Object setNullLongFixnum(RubyArray array, int index, long value, UndefinedPlaceholder unused) {
+        public Object setNullLongFixnum(RubyArray array, int index, long value, U unused) {
             if (index == 0) {
                 array.setStore(new long[]{value}, 1);
             } else {
@@ -774,7 +774,7 @@ public abstract class ArrayNodes {
         }
 
         @Specialization(guards = "isNull")
-        public Object setNullObject(RubyArray array, int index, Object value, UndefinedPlaceholder unused) {
+        public Object setNullObject(RubyArray array, int index, Object value, U unused) {
             notDesignedForCompilation();
 
             if (index == 0) {
@@ -787,7 +787,7 @@ public abstract class ArrayNodes {
         }
 
         @Specialization(guards = "isIntegerFixnum")
-        public int setIntegerFixnum(RubyArray array, int index, int value, UndefinedPlaceholder unused) {
+        public int setIntegerFixnum(RubyArray array, int index, int value, U unused) {
             final int normalisedIndex = array.normaliseIndex(index);
             int[] store = (int[]) array.getStore();
 
@@ -820,7 +820,7 @@ public abstract class ArrayNodes {
         }
 
         @Specialization(guards = "isIntegerFixnum")
-        public long setLongInIntegerFixnum(RubyArray array, int index, long value, UndefinedPlaceholder unused) {
+        public long setLongInIntegerFixnum(RubyArray array, int index, long value, U unused) {
             if (array.getAllocationSite() != null) {
                 array.getAllocationSite().convertedIntToLong();
             }
@@ -891,13 +891,13 @@ public abstract class ArrayNodes {
         }
 
         @Specialization(guards = "isLongFixnum")
-        public int setLongFixnum(RubyArray array, int index, int value, UndefinedPlaceholder unused) {
+        public int setLongFixnum(RubyArray array, int index, int value, U unused) {
             setLongFixnum(array, index, (long) value, unused);
             return value;
         }
 
         @Specialization(guards = "isLongFixnum")
-        public long setLongFixnum(RubyArray array, int index, long value, UndefinedPlaceholder unused) {
+        public long setLongFixnum(RubyArray array, int index, long value, U unused) {
             final int normalisedIndex = array.normaliseIndex(index);
             long[] store = (long[]) array.getStore();
 
@@ -930,7 +930,7 @@ public abstract class ArrayNodes {
         }
 
         @Specialization(guards = "isFloat")
-        public double setFloat(RubyArray array, int index, double value, UndefinedPlaceholder unused) {
+        public double setFloat(RubyArray array, int index, double value, U unused) {
             final int normalisedIndex = array.normaliseIndex(index);
             double[] store = (double[]) array.getStore();
 
@@ -963,7 +963,7 @@ public abstract class ArrayNodes {
         }
 
         @Specialization(guards = "isObject")
-        public Object setObject(RubyArray array, int index, Object value, UndefinedPlaceholder unused) {
+        public Object setObject(RubyArray array, int index, Object value, U unused) {
             final int normalisedIndex = array.normaliseIndex(index);
             Object[] store = (Object[]) array.getStore();
 
@@ -1008,14 +1008,14 @@ public abstract class ArrayNodes {
 
             if (begin >= array.getSize()) {
                 // We don't care of length in this case
-                return setObject(array, start, value, UndefinedPlaceholder.INSTANCE);
+                return setObject(array, start, value, U.INSTANCE);
             } else {
                 throw  new UnsupportedOperationException();
             }
         }
 
         @Specialization(guards = "isIntegerFixnum")
-        public RubyArray setIntegerFixnumRange(RubyArray array, RubyRange.IntegerFixnumRange range, RubyArray other, UndefinedPlaceholder unused) {
+        public RubyArray setIntegerFixnumRange(RubyArray array, RubyRange.IntegerFixnumRange range, RubyArray other, U unused) {
             if (range.doesExcludeEnd()) {
                 CompilerDirectives.transferToInterpreter();
                 throw new UnsupportedOperationException();
@@ -1898,12 +1898,12 @@ public abstract class ArrayNodes {
         }
 
         @Specialization
-        public RubyArray initialize(RubyArray array, int size, UndefinedPlaceholder defaultValue, UndefinedPlaceholder block) {
+        public RubyArray initialize(RubyArray array, int size, U defaultValue, U block) {
             return initialize(array, size, getContext().getCoreLibrary().getNilObject(), block);
         }
 
         @Specialization
-        public RubyArray initialize(RubyArray array, long size, UndefinedPlaceholder defaultValue, UndefinedPlaceholder block) {
+        public RubyArray initialize(RubyArray array, long size, U defaultValue, U block) {
             if (size > Integer.MAX_VALUE) {
                 throw new IllegalStateException();
             }
@@ -1911,7 +1911,7 @@ public abstract class ArrayNodes {
         }
 
         @Specialization
-        public RubyArray initialize(RubyArray array, int size, int defaultValue, UndefinedPlaceholder block) {
+        public RubyArray initialize(RubyArray array, int size, int defaultValue, U block) {
             final int[] store = new int[size];
             Arrays.fill(store, defaultValue);
             array.setStore(store, size);
@@ -1919,7 +1919,7 @@ public abstract class ArrayNodes {
         }
 
         @Specialization
-        public RubyArray initialize(RubyArray array, int size, long defaultValue, UndefinedPlaceholder block) {
+        public RubyArray initialize(RubyArray array, int size, long defaultValue, U block) {
             final long[] store = new long[size];
             Arrays.fill(store, defaultValue);
             array.setStore(store, size);
@@ -1927,7 +1927,7 @@ public abstract class ArrayNodes {
         }
 
         @Specialization
-        public RubyArray initialize(RubyArray array, int size, double defaultValue, UndefinedPlaceholder block) {
+        public RubyArray initialize(RubyArray array, int size, double defaultValue, U block) {
             final double[] store = new double[size];
             Arrays.fill(store, defaultValue);
             array.setStore(store, size);
@@ -1935,7 +1935,7 @@ public abstract class ArrayNodes {
         }
 
         @Specialization
-        public RubyArray initialize(RubyArray array, int size, Object defaultValue, UndefinedPlaceholder block) {
+        public RubyArray initialize(RubyArray array, int size, Object defaultValue, U block) {
             final Object[] store = new Object[size];
             Arrays.fill(store, defaultValue);
             array.setStore(store, size);
@@ -1943,7 +1943,7 @@ public abstract class ArrayNodes {
         }
 
         @Specialization
-        public RubyArray initialize(VirtualFrame frame, RubyArray array, int size, UndefinedPlaceholder defaultValue, RubyProc block) {
+        public RubyArray initialize(VirtualFrame frame, RubyArray array, int size, U defaultValue, RubyProc block) {
             Object store = arrayBuilder.start(size);
 
             int count = 0;
@@ -1966,7 +1966,7 @@ public abstract class ArrayNodes {
         }
 
         @Specialization
-        public RubyArray initialize(RubyArray array, RubyArray copy, UndefinedPlaceholder defaultValue, UndefinedPlaceholder block) {
+        public RubyArray initialize(RubyArray array, RubyArray copy, U defaultValue, U block) {
             notDesignedForCompilation();
             array.setStore(copy.slowToArray(), copy.getSize());
             return array;
@@ -2094,7 +2094,7 @@ public abstract class ArrayNodes {
         }
 
         @Specialization
-        public Object inject(VirtualFrame frame, RubyArray array, RubySymbol symbol, UndefinedPlaceholder unused) {
+        public Object inject(VirtualFrame frame, RubyArray array, RubySymbol symbol, U unused) {
             notDesignedForCompilation();
 
             final Object[] store = array.slowToArray();
@@ -2214,7 +2214,7 @@ public abstract class ArrayNodes {
         }
 
         @Specialization
-        public RubyString join(RubyArray array, UndefinedPlaceholder unused) {
+        public RubyString join(RubyArray array, U unused) {
             Object separator = getContext().getCoreLibrary().getGlobalVariablesObject().getInstanceVariable("$,");
             if (separator == getContext().getCoreLibrary().getNilObject()) {
                 separator = getContext().makeString("");
@@ -3434,7 +3434,7 @@ public abstract class ArrayNodes {
         }
 
         @Specialization(guards = "isNull")
-        public RubyArray sortNull(RubyArray array, UndefinedPlaceholder block) {
+        public RubyArray sortNull(RubyArray array, U block) {
             notDesignedForCompilation();
 
             return new RubyArray(getContext().getCoreLibrary().getArrayClass());
@@ -3442,7 +3442,7 @@ public abstract class ArrayNodes {
 
         @ExplodeLoop
         @Specialization(guards = {"isIntegerFixnum", "isSmall"})
-        public RubyArray sortVeryShortIntegerFixnum(VirtualFrame frame, RubyArray array, UndefinedPlaceholder block) {
+        public RubyArray sortVeryShortIntegerFixnum(VirtualFrame frame, RubyArray array, U block) {
             final int[] store = (int[]) array.getStore();
 
             final int size = array.getSize();
@@ -3467,7 +3467,7 @@ public abstract class ArrayNodes {
         }
 
         @Specialization(guards = "isIntegerFixnum")
-        public RubyArray sortIntegerFixnum(VirtualFrame frame, RubyArray array, UndefinedPlaceholder block) {
+        public RubyArray sortIntegerFixnum(VirtualFrame frame, RubyArray array, U block) {
             notDesignedForCompilation();
 
             final Object[] boxed = ArrayUtils.box((int[]) array.getStore());
@@ -3478,7 +3478,7 @@ public abstract class ArrayNodes {
 
         @ExplodeLoop
         @Specialization(guards = {"isLongFixnum", "isSmall"})
-        public RubyArray sortVeryShortLongFixnum(VirtualFrame frame, RubyArray array, UndefinedPlaceholder block) {
+        public RubyArray sortVeryShortLongFixnum(VirtualFrame frame, RubyArray array, U block) {
             final long[] store = (long[]) array.getStore();
 
             final int size = array.getSize();
@@ -3503,7 +3503,7 @@ public abstract class ArrayNodes {
         }
 
         @Specialization(guards = "isLongFixnum")
-        public RubyArray sortLongFixnum(VirtualFrame frame, RubyArray array, UndefinedPlaceholder block) {
+        public RubyArray sortLongFixnum(VirtualFrame frame, RubyArray array, U block) {
             notDesignedForCompilation();
 
             final Object[] boxed = ArrayUtils.box((long[]) array.getStore());
@@ -3513,7 +3513,7 @@ public abstract class ArrayNodes {
         }
 
         @Specialization(guards = "isFloat")
-        public RubyArray sortDouble(VirtualFrame frame, RubyArray array, UndefinedPlaceholder block) {
+        public RubyArray sortDouble(VirtualFrame frame, RubyArray array, U block) {
             notDesignedForCompilation();
 
             final Object[] boxed = ArrayUtils.box((double[]) array.getStore());
@@ -3523,7 +3523,7 @@ public abstract class ArrayNodes {
         }
 
         @Specialization(guards = {"isObject", "isSmall"})
-        public RubyArray sortVeryShortObject(VirtualFrame frame, RubyArray array, UndefinedPlaceholder block) {
+        public RubyArray sortVeryShortObject(VirtualFrame frame, RubyArray array, U block) {
             final Object[] store = (Object[]) array.getStore();
 
             // Insertion sort
@@ -3545,7 +3545,7 @@ public abstract class ArrayNodes {
         }
 
         @Specialization(guards = "isObject")
-        public RubyArray sortObject(VirtualFrame frame, RubyArray array, UndefinedPlaceholder block) {
+        public RubyArray sortObject(VirtualFrame frame, RubyArray array, U block) {
             notDesignedForCompilation();
 
             final Object[] store = Arrays.copyOf((Object[]) array.getStore(), array.getSize());

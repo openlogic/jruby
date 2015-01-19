@@ -15,7 +15,7 @@ import com.oracle.truffle.api.frame.VirtualFrame;
 import com.oracle.truffle.api.source.SourceSection;
 import com.oracle.truffle.api.utilities.BranchProfile;
 import org.jruby.truffle.runtime.RubyContext;
-import org.jruby.truffle.runtime.UndefinedPlaceholder;
+import org.jruby.truffle.runtime.U;
 import org.jruby.truffle.runtime.control.BreakException;
 import org.jruby.truffle.runtime.control.NextException;
 import org.jruby.truffle.runtime.control.RedoException;
@@ -92,7 +92,7 @@ public abstract class IntegerNodes {
         }
 
         @Specialization
-        public RubyArray times(VirtualFrame frame, int n, UndefinedPlaceholder block) {
+        public RubyArray times(VirtualFrame frame, int n, U block) {
             notDesignedForCompilation();
 
             final int[] array = new int[n];

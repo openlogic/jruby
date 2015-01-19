@@ -14,7 +14,7 @@ import com.oracle.truffle.api.dsl.Specialization;
 import com.oracle.truffle.api.source.SourceSection;
 import org.jruby.common.IRubyWarnings;
 import org.jruby.truffle.runtime.RubyContext;
-import org.jruby.truffle.runtime.UndefinedPlaceholder;
+import org.jruby.truffle.runtime.U;
 import org.jruby.truffle.runtime.core.RubyProc;
 import org.jruby.truffle.runtime.core.RubyString;
 import org.jruby.truffle.runtime.signal.ProcSignalHandler;
@@ -36,7 +36,7 @@ public abstract class SignalNodes {
         }
 
         @Specialization
-        public Object trap(RubyString signalName, UndefinedPlaceholder command, final RubyProc block) {
+        public Object trap(RubyString signalName, U command, final RubyProc block) {
             notDesignedForCompilation();
 
             final Signal signal = new Signal(signalName.toString());
@@ -52,7 +52,7 @@ public abstract class SignalNodes {
         }
 
         @Specialization
-        public Object trap(RubyString signalName, RubyString command, UndefinedPlaceholder block) {
+        public Object trap(RubyString signalName, RubyString command, U block) {
             notDesignedForCompilation();
             getContext().getRuntime().getWarnings().warn(IRubyWarnings.ID.TRUFFLE, Truffle.getRuntime().getCallerFrame().getCallNode().getEncapsulatingSourceSection().getSource().getName(), Truffle.getRuntime().getCallerFrame().getCallNode().getEncapsulatingSourceSection().getStartLine(), "Signal#trap with a string command not implemented yet");
             return getContext().getCoreLibrary().getNilObject();
